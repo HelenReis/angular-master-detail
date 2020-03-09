@@ -19,10 +19,9 @@ export class CategoryService {
   }
 
   create(category: Category): Observable<Category> {
-    return this._http.post(this.apiPath, category).pipe(
-      catchError(this.handleError),
-      map(() => category)
-    );
+    return this._http
+      .post(this.apiPath, category)
+      .pipe(catchError(this.handleError), map(this.jsonDataToCategory));
   }
 
   delete(id: number): Observable<any> {
