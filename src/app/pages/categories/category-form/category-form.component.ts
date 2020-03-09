@@ -36,10 +36,12 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     this.loadCategory();
   }
 
-  ngAfterContentChecked(): void {}
+  ngAfterContentChecked(): void {
+    this.setPageTitle();
+  }
 
   private setCurrentAction() {
-    if (this.route.url[0].path == "new") {
+    if (this.route.snapshot.url[0].path == "new") {
       this.currentAction = "new";
     } else {
       this.currentAction = "edit";
@@ -60,10 +62,22 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
         .pipe(
           switchMap(params => this.categoryService.getById(+params.get("id")))
         )
-        .subscribe(category => {
-          this.category = category;
-          this.categoryForm.patchValue(category);
-        });
+        .subscribe(
+          category => {
+            this.category = category;
+            this.categoryForm.patchValue(category);
+          },
+          error => alert("Erro! Tente novamente mais tarde.")
+        );
+    }
+  }
+
+  private setPageTitle() {
+    if (this.currentAction == "new") {
+      this.pageTitle = "Cadastro de nova categoria";
+    } else {
+      const categoryName = this.category.name || "";
+      this.pageTitle = "Editando categoria: " + categoryName;
     }
   }
 }
