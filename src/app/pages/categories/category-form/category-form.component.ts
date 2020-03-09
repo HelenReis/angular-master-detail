@@ -80,4 +80,64 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
       this.pageTitle = "Editando categoria: " + categoryName;
     }
   }
+
+  submitForm() {
+    this.submittingForm = true;
+
+    if (this.currentAction === "new") {
+      this.createCategory();
+    } else {
+      this.updateCategory();
+    }
+  }
+
+  private createCategory() {
+    const category: Category = Object.assign(
+      new Category(),
+      this.categoryForm.value
+    );
+
+    this.categoryService.create(category).subscribe(
+      category => {
+        this.actionsForSuccess(category);
+      },
+      error => this.actionsForErrors(error)
+    );
+  }
+
+  private updateCategory() {
+    const category: Category = Object.assign(
+      new Category(),
+      this.categoryForm.value
+    );
+
+    this.categoryService.update(category).subscribe(
+      category => this.actionsForSuccess(category),
+      error => this.actionsForErrors(error)
+    );
+  }
+
+  private actionsForSuccess(category: Category) {
+    alert("Solicitação processada com sucesso");
+
+    this.router
+      .navigateByUrl("categories", { skipLocationChange: true })
+      .then(() => {
+        this.router.navigate(["categories", category.id, "edit"]);
+      });
+  }
+
+  private actionsForErrors(error) {
+    alert("Ocorreu um erro ao processar sua solicitação");
+
+    this.submittingForm = false;
+
+    if (error.status === 422) {
+      this.serverErrorMessages = JSON.parse(error._body).errors;
+    } else {
+      this.serverErrorMessages = [
+        "Falha na comunicação com o servidor. Tente mais tarde."
+      ];
+    }
+  }
 }
