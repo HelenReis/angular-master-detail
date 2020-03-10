@@ -136,6 +136,39 @@
         <!-- Campo date -->
       </div>
       <div class="form-row">
+        <!-- Campo amount -->
+        <div class="form-group col-md-2">
+          <label for="paid">Pago</label>
+
+          <div class="btn-group">
+            <label
+              (click)="entryForm.get('paid').setValue(true)"
+              [class.active]="entryForm.get('paid').value === true"
+              class="btn btn-outline-info"
+              >Pago</label
+            >
+            <label
+              (click)="entryForm.get('paid').setValue(false)"
+              [class.active]="entryForm.get('paid').value === false"
+              class="btn btn-outline-info"
+              >Pendente</label
+            >
+          </div>
+
+          <div
+            class="text-danger"
+            *ngIf="
+              this.entryForm.get('paid').invalid &&
+              this.entryForm.get('paid').touched
+            "
+          >
+            <div *ngIf="this.entryForm.get('paid').errors.required">
+              Dado obrigatório!
+            </div>
+          </div>
+        </div>
+        <!-- Campo amount -->
+
         <!-- Campo description -->
         <div class="form-group col-md-8">
           <label for="description">Descrição</label>
