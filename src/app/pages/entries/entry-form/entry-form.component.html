@@ -20,7 +20,7 @@
 
 <form [formGroup]="this.entryForm" (submit)="this.submitForm()">
   <div class="card">
-    <div class="card-header">Informações sobre a categoria</div>
+    <div class="card-header">Informações sobre o lançamento</div>
 
     <div class="card-body">
       <div class="form-row">
@@ -33,8 +33,11 @@
             formControlName="type"
             class="form-control"
           >
-            <option value="expense">Despesa</option>
-            <option value="revenue">Receita</option>
+            <option
+              *ngFor="let options of typeOptions"
+              [value]="options.value"
+              >{{ options.text }}</option
+            >
           </select>
           <div
             class="text-danger"
@@ -78,7 +81,7 @@
 
         <!-- Campo amount -->
         <div class="form-group col-md-3">
-          <label for="name">Valor</label>
+          <label for="amount">Valor</label>
           <div class="input-group">
             <div class="input-group-prepend">
               <div class="input-group-text">
@@ -169,8 +172,37 @@
         </div>
         <!-- Campo amount -->
 
+        <!-- Campo categoryId -->
+        <div class="form-group col-md-3">
+          <label for="categoryId">Categoria</label>
+
+          <select
+            name="categoryId"
+            id="categoryId"
+            formControlName="categoryId"
+            class="form-control"
+          >
+            <option *ngFor="let category of categories" [value]="category.id">{{
+              category.name
+            }}</option>
+          </select>
+
+          <div
+            class="text-danger"
+            *ngIf="
+              this.entryForm.get('categoryId').invalid &&
+              this.entryForm.get('categoryId').touched
+            "
+          >
+            <div *ngIf="this.entryForm.get('categoryId').errors.required">
+              Dado obrigatório!
+            </div>
+          </div>
+        </div>
+        <!-- Campo categoryId -->
+
         <!-- Campo description -->
-        <div class="form-group col-md-8">
+        <div class="form-group col-md-7">
           <label for="description">Descrição</label>
           <input
             type="text"

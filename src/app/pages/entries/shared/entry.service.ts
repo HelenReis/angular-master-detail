@@ -31,10 +31,13 @@ export class EntryService {
     );
   }
 
-  update(entry: Entry): Observable<Entry> {
-    return this._http
-      .put(`${this.apiPath}/${entry.id}/edit`, entry)
-      .pipe(catchError(this.handleError), map(this.jsonDataToEntry));
+  update(entry: Entry): void {
+    debugger;
+    this._http.put(`${this.apiPath}/${entry.id}/edit`, entry).subscribe(res => {
+      debugger;
+      console.log("teste");
+    });
+    //.pipe(catchError(this.handleError), map(this.jsonDataToEntry));
   }
 
   getById(id: number): Observable<Entry> {
@@ -54,6 +57,8 @@ export class EntryService {
   }
 
   private jsonDataToEntry(jsonData: any): Entry {
+    debugger;
+    const teste = Object.assign(new Entry(), jsonData);
     return Object.assign(new Entry(), jsonData);
   }
 
