@@ -32,9 +32,10 @@ export class CategoryService {
   }
 
   update(category: Category): Observable<Category> {
-    return this._http
-      .put(`${this.apiPath}/${category.id}/edit`, category)
-      .pipe(catchError(this.handleError), map(this.jsonDataToCategory));
+    return this._http.put(`${this.apiPath}/${category.id}`, category).pipe(
+      catchError(this.handleError),
+      map(() => category)
+    );
   }
 
   getById(id: number): Observable<Category> {

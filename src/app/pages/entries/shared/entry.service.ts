@@ -2,7 +2,8 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { Entry } from "./entry.model";
-import { catchError, map } from "rxjs/operators";
+import { catchError, map, flatMap } from "rxjs/operators";
+import { CategoryService } from "../../categories/shared/category.service";
 
 @Injectable({
   providedIn: "root"
@@ -10,7 +11,10 @@ import { catchError, map } from "rxjs/operators";
 export class EntryService {
   private apiPath = "api/entries";
 
-  constructor(private _http: HttpClient) {}
+  constructor(
+    private _http: HttpClient,
+    private _categoryService: CategoryService
+  ) {}
 
   getAll(): Observable<Entry[]> {
     return this._http
@@ -19,9 +23,15 @@ export class EntryService {
   }
 
   create(entry: Entry): Observable<Entry> {
-    return this._http
-      .post(this.apiPath, entry)
-      .pipe(catchError(this.handleError), map(this.jsonDataToEntry));
+    return this._categoryService.getById(entry.categoryId).pipe(
+      flatMap(category => {
+        entry.category = category;
+
+        return this._http
+          .post(this.apiPath, entry)
+          .pipe(catchError(this.handleError), map(this.jsonDataToEntry));
+      })
+    );
   }
 
   delete(id: number): Observable<any> {
@@ -32,9 +42,16 @@ export class EntryService {
   }
 
   update(entry: Entry): Observable<Entry> {
-    return this._http
-      .put(`${this.apiPath}/${entry.id}/edit`, entry)
-      .pipe(catchError(this.handleError), map(this.jsonDataToEntry));
+    return this._categoryService.getById(entry.categoryId).pipe(
+      flatMap(category => {
+        entry.category = category;
+
+        return this._http.put(`${this.apiPath}/${entry.id}`, entry).pipe(
+          catchError(this.handleError),
+          map(() => entry)
+        );
+      })
+    );
   }
 
   getById(id: number): Observable<Entry> {
@@ -54,6 +71,7 @@ export class EntryService {
   }
 
   private jsonDataToEntry(jsonData: any): Entry {
+    debugger;
     return Object.assign(new Entry(), jsonData);
   }
 

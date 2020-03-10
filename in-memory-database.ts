@@ -22,6 +22,17 @@ export class InMemoryDatabase implements InMemoryDbService {
         amount: "70,80",
         type: "expense",
         description: "Utilidades domésticas."
+      } as Entry,
+      {
+        id: 2,
+        name: "Litro de água",
+        categoryId: categories[1].id,
+        category: categories[1],
+        paid: false,
+        date: "14/10/2019",
+        amount: "70,80",
+        type: "revenue",
+        description: "Utilidades domésticas."
       } as Entry
     ];
 
