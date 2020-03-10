@@ -75,6 +75,38 @@
           </div>
         </div>
         <!-- Campo name -->
+
+        <!-- Campo amount -->
+        <div class="form-group col-md-3">
+          <label for="name">Valor</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                R$
+              </div>
+            </div>
+            <input
+              [imask]="imaskConfig"
+              type="text"
+              class="form-control text-right"
+              id="amount"
+              formControlName="amount"
+            />
+          </div>
+
+          <div
+            class="text-danger"
+            *ngIf="
+              this.entryForm.get('amount').invalid &&
+              this.entryForm.get('amount').touched
+            "
+          >
+            <div *ngIf="this.entryForm.get('amount').errors.required">
+              Dado obrigatório!
+            </div>
+          </div>
+        </div>
+        <!-- Campo amount -->
       </div>
       <div class="form-row">
         <!-- Campo description -->
