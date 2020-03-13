@@ -71,7 +71,6 @@ export class EntryService {
   }
 
   private jsonDataToEntry(jsonData: any): Entry {
-    debugger;
     return Object.assign(new Entry(), jsonData);
   }
 
