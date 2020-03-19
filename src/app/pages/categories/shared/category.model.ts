@@ -8,4 +8,8 @@ export class Category extends BaseResourceModel {
   ) {
     super();
   }
+
+  public static fromJson(jsonData: any): Category {
+    return Object.assign(new Category(), jsonData);
+  }
 }
